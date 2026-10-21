@@ -1,0 +1,38 @@
+# Exemplo com o cadastro fictício gerado por: python samples/gerar_pessoas.py
+
+# De onde vêm as pessoas: um CSV (separado por ;) ...
+fonte:
+  csv: samples/pessoas.csv
+# ... ou direto do banco (a senha vem do ambiente, nunca do arquivo):
+# fonte:
+#   url: mysql+pymysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}
+#   sql: |
+#     SELECT p.id_pessoa, p.nome, p.cpf, p.data_nasc, p.email, p.fone,
+#            (SELECT COUNT(*) FROM matricula m WHERE m.id_responsavel = p.id_pessoa) AS vinculos
+#     FROM pessoa p
+
+# Nome da coluna no arquivo/consulta para cada campo (só o que for diferente)
+colunas:
+  id: id
+  nome: nome
+  cpf: cpf
+  nascimento: nascimento
+  email: email
+  telefone: telefone
+  familia: familia      # opcional: grupo familiar; várias separadas por ;
+  vinculos: vinculos    # opcional: quantas coisas apontam para a pessoa
+
+# Data de nascimento repetida em tanta gente assim é "data padrão" e não prova nada
+limite_data_repetida: 15
+
+# Semelhança mínima (0 a 1) para apontar grafia parecida para revisão
+limiar_grafia: 0.92
+
+# Opcional: gera os scripts SQL (MySQL) para aplicar no banco
+sql:
+  tabela_pessoa: pessoa
+  pk_pessoa: id
+  referencias:            # colunas de outras tabelas que apontam para a pessoa
+    - {tabela: matricula, coluna: id_responsavel, pk: id_matricula}
+    - {tabela: filiacao, coluna: id_pessoa, pk: id_filiacao}
+    - {tabela: contato, coluna: id_pessoa, pk: id_contato}

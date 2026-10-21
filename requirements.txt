@@ -1,0 +1,5 @@
+PyYAML>=6.0
+pytest>=8.0
+# Opcional, para ler direto do banco
+SQLAlchemy>=2.0
+PyMySQL>=1.1
